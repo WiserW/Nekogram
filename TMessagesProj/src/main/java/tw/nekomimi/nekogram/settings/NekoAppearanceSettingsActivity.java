@@ -35,6 +35,7 @@ public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity imp
 
     private final int hideAllTabRow = rowId++;
     private final int tabsTitleTypeRow = rowId++;
+    private final int tabsPositionRow = rowId++;
 
     @Override
     public boolean onFragmentCreate() {
@@ -81,6 +82,7 @@ public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity imp
                     LocaleController.getString(R.string.TabTitleTypeIcon);
             default -> LocaleController.getString(R.string.TabTitleTypeMix);
         }).slug("tabsTitleType"));
+        items.add(TextSettingsCellFactory.of(tabsPositionRow, LocaleController.getString(R.string.TabsPosition), LocaleController.getString(NekoConfig.bottomFilterTabs ? R.string.TabsPositionBottom : R.string.TabsPositionTop)).slug("tabsPosition"));
         items.add(UItem.asShadow(null));
     }
 
@@ -164,6 +166,16 @@ public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity imp
                 ((TextCheckCell) view).setChecked(NekoConfig.hideBottomNavigationBar);
             }
             parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (id == tabsPositionRow) {
+            ArrayList<String> arrayList = new ArrayList<>();
+            arrayList.add(LocaleController.getString(R.string.TabsPositionTop));
+            arrayList.add(LocaleController.getString(R.string.TabsPositionBottom));
+            PopupHelper.show(arrayList, LocaleController.getString(R.string.TabsPosition), NekoConfig.bottomFilterTabs ? 1 : 0, getParentActivity(), view, i -> {
+                NekoConfig.setBottomFilterTabs(i == 1);
+                item.textValue = arrayList.get(i);
+                listView.adapter.notifyItemChanged(position, PARTIAL);
+                parentLayout.rebuildAllFragmentViews(false, false);
+            }, resourcesProvider);
         }
     }
 

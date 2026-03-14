@@ -141,6 +141,7 @@ public class NekoConfig {
     public static boolean keepFormatting = true;
     public static boolean predictiveBackAnimation = false;
     public static boolean hideBottomNavigationBar = false;
+    public static boolean bottomFilterTabs = false;
 
     public static boolean shouldNOTTrustMe = false;
 
@@ -243,6 +244,7 @@ public class NekoConfig {
             keepFormatting = preferences.getBoolean("keepFormatting", true);
             predictiveBackAnimation = preferences.getBoolean("predictiveBackAnimation", false);
             hideBottomNavigationBar = preferences.getBoolean("hideBottomNavigationBar", false);
+            bottomFilterTabs = preferences.getBoolean("bottomFilterTabs", false);
 
             LensHelper.checkLensSupportAsync();
             preferences.registerOnSharedPreferenceChangeListener(listener);
@@ -390,6 +392,14 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("downloadSpeedBoost2", boost);
+        editor.apply();
+    }
+
+    public static void setBottomFilterTabs(boolean bottom) {
+        bottomFilterTabs = bottom;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("bottomFilterTabs", bottomFilterTabs);
         editor.apply();
     }
 
