@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,9 +56,10 @@ public class ChatActivityActionsButtonsLayout extends LinearLayout {
         replyButton.button.setOnClickListener(v -> {});
         ScaleStateListAnimator.apply(replyButton.button, .065f, 2f);
 
-        selectButton.button = ChatActivityBlurredRoundButton.create(context, blurredBackgroundDrawableViewFactory,
-                colorProvider, resourcesProvider, R.drawable.ic_select_between, 48);
-        selectButton.button.setContentDescription(LocaleController.getString(R.string.SelectBetween));
+        selectButton.button = ChatActivityBlurredRoundButton.create(
+                context, blurredBackgroundDrawableViewFactory, colorProvider, resourcesProvider
+        );
+        selectButton.button.setOnClickListener(v -> {});
         ScaleStateListAnimator.apply(selectButton.button, .065f, 2f);
 
         forwardButton.button = ChatActivityBlurredRoundButton.create(
@@ -66,13 +68,16 @@ public class ChatActivityActionsButtonsLayout extends LinearLayout {
         ScaleStateListAnimator.apply(forwardButton.button, .065f, 2f);
 
         addTextView(replyButton, LocaleController.getString(R.string.Reply), R.drawable.input_reply, false);
+        addTextView(selectButton, LocaleController.getString(R.string.Select), R.drawable.ic_select_between, false);
         addTextView(forwardButton, LocaleController.getString(R.string.Forward), R.drawable.input_forward, true);
 
         setOrientation(HORIZONTAL);
         setClipChildren(false);
 
-        addView(replyButton.button, LayoutHelper.createLinear(0, 56, 1f, 1, 0, -1, 0));
-        addView(selectButton.button, LayoutHelper.createLinear(56, 56, -1, 0, -1, 0));
+        var leftLayout = new FrameLayout(context);
+        leftLayout.addView(replyButton.button, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        leftLayout.addView(selectButton.button, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        addView(leftLayout, LayoutHelper.createLinear(0, 56, 1f, 1, 0, -1, 0));
         addView(forwardButton.optionsView, LayoutHelper.createLinear(0, 56, 1f, -1, 0, 1, 0));
     }
 
@@ -195,11 +200,8 @@ public class ChatActivityActionsButtonsLayout extends LinearLayout {
         final float visibility = totalVisibilityFactor * holder.visibilityAnimator.getFloatValue();
         final float offsetY = dp(54) * (1f - visibility);
         float offsetX = getMeasuredWidth() / 2f * (1f - AnimatorUtils.DECELERATE_INTERPOLATOR.getInterpolation(visibility));
-        if (holder == replyButton) {
+        if (holder == replyButton || holder == selectButton) {
             offsetX *= -1;
-        }
-        if (holder == selectButton) {
-            offsetX = 0;
         }
 
         holder.button.setTranslationX(offsetX);
