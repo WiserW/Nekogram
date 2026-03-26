@@ -144,7 +144,7 @@ public class WhisperHelper {
                     return;
                 }
                 var apiToken = editTextApiToken.getText();
-                if (!TextUtils.isEmpty(apiToken) && apiToken.length() != 40) {
+                if (!TextUtils.isEmpty(apiToken) && apiToken.length() < 40) {
                     AndroidUtilities.shakeViewSpring(editTextApiToken, -6);
                     BotWebViewVibrationEffect.APP_ERROR.vibrate();
                     return;
