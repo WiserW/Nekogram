@@ -29,8 +29,24 @@ jobs:
     
     - name: Create dummy google-services.json
       run: |
-        mkdir -p TMessagesProj/src/debug
-        echo '{}' > TMessagesProj/google-services.json
+        # 放在正确的模块目录下
+        mkdir -p TMessagesProj_App
+        echo '{
+          "project_info": {
+            "project_number": "000000000000",
+            "project_id": "dummy-project"
+          },
+          "client": [
+            {
+              "client_info": {
+                "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                "android_client_info": {
+                  "package_name": "tw.nekomimi.nekogram"
+                }
+              }
+            }
+          ]
+        }' > TMessagesProj_App/google-services.json
     
     - name: Build Debug APK with Gradle
       run: ./gradlew assembleDebug
