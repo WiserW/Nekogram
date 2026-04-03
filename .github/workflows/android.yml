@@ -23,6 +23,15 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Create local.properties
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+    
+    - name: Create dummy google-services.json
+      run: |
+        mkdir -p TMessagesProj/src/debug
+        echo '{}' > TMessagesProj/google-services.json
+    
     - name: Build Debug APK with Gradle
       run: ./gradlew assembleDebug
 
